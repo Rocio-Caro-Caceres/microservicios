@@ -1,0 +1,5 @@
+POST http://localhost:5003/api/v1/pagos/registrar 
+Content-Type: aplicacion/json 
+@C:\Users\Rocio Caro Caceres\Desktop\Facultad\Tercer año\Desarollo de software\TP_profe\patron_saga\load_testing\metricas.json
+
+{"producto": 1, "precio": 100.50, "medio_pago": "tarjeta"}

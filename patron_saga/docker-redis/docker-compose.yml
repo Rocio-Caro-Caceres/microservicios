@@ -1,0 +1,17 @@
+version: '3'
+services:
+  redis:
+    image: redis:7.4.1-alpine 
+    container_name: redis
+    ports:
+      - 6379:6379 # Exponer el puerto 6379 del contenedor
+    networks:
+      - mired
+    command: redis-server --requirepass ${REDIS_PASSWORD} #comando para iniciar redis con contraseña si es necesario command: ["redis-server", "--requirepass", "Qvv3r7y"] #comando para inicializar redis con contraseña si es necesario
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DB=0 #Definir la base de datos a usar en Redis, por defecto es 0
+
+networks:
+  mired:
+    external: true #Asegurate de que la red externa mired esta creada 
