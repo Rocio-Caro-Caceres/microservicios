@@ -13,6 +13,7 @@ migrate = Migrate()
 ma = Marshmallow()
 cache = Cache()
 
+
 def create_app() -> None:
 
     app_context = os.getenv('FLASK_CONTEXT')
@@ -26,9 +27,15 @@ def create_app() -> None:
     migrate.init_app(app, db)
     cache.init_app(app, config=cache_config)
     
+
+    
     from app.resources import stock_bp
     app.register_blueprint(stock_bp, url_prefix='/api/v1')
     
+    @app.errorhandler(429)
+    def ratelimit_handler(e):
+        return {"error": "Demasiadas solicitudes. Por favor, espere."}, 429
+
     @app.shell_context_processor    
     def ctx():
         return {"app": app}
