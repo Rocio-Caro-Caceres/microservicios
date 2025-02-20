@@ -23,8 +23,8 @@ class ClientePagosService:
             self.pago = pago_schema.load( r.json() )
             logging.info(f"Pago realizado id: {self.pago.id}")
         else:
-            logging.error(f"Error en el microservicio compras")
-            raise BaseException("Error en el microservicio compras")
+            logging.error(f"Error en el microservicio pagos")
+            raise BaseException("Error en el microservicio pagos")
 
     
     def cancelar_pago(self) -> None:
@@ -35,7 +35,7 @@ class ClientePagosService:
         
         r = requests.put(f'{self.URL}pagos/cancelar/{self.pago.id}')
         if r.status_code == 200:
-            logging.warning(f"Pago eliminado ID: {self.compra.id}")
+            logging.warning(f"Pago eliminado ID: {self.pago.id}")
         else:
             logging.error("Error tratando de compensar Pago")
             raise BaseException("Error tratando de compensar Pago")

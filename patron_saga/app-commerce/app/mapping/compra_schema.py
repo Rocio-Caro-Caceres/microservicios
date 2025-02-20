@@ -1,9 +1,10 @@
 from marshmallow import fields, Schema, post_load
 from app.models import Compra
+import logging
 
 class CompraSchema(Schema):
     id = fields.Integer(required=False)
-    producto = fields.Integer(required=False)
+    producto = fields.Integer(required=True)
     fecha_compra = fields.DateTime(required=False)
     direccion_envio = fields.String(required=True)
     deleted_at = fields.DateTime(required=False, allow_none=True)
@@ -14,4 +15,3 @@ class CompraSchema(Schema):
         for key, value in data.items():
             setattr(compra, key, value)
         return compra
-        

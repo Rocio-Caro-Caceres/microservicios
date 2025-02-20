@@ -15,17 +15,33 @@ class ClienteComprasService:
         self.compra.producto = producto.id
         self.compra.direccion_envio = direccion_envio
         compra_schema = CompraSchema()
-        r = requests.post(f'{self.URL}compras', json=compra_schema.dump(self.compra))
+
+        # Serializar y loggear en una sola línea
+        logging.info(f"[CLIENTE_COMPRAS] Enviando datos al MS compras: {compra_schema.dump(self.compra)}")
+        
+        # Enviar la solicitud al microservicio de compras
+        r = requests.post(f'{self.URL}compras', json=compra_schema.dump(self.compra))   
+
+        logging.info(f"[CLIENTE_COMPRAS] Respuesta del microservicio compras: {r.status_code} - {r.text}")
 
         if r.status_code == 200:
             logging.info(f"Compra <- {r.json()}")
-           
-            self.compra = compra_schema.load( r.json() )
+       
+            # Deserializar la respuesta y actualizar self.compra
+            compra_data = r.json()
+            self.compra = compra_schema.load(compra_data)
+            logging.info(f"[CLIENTE_COMPRAS] Compra deserializada con ID: {self.compra.id}")
+
+            # Verificar que el id esté asignado
+            if not self.compra.id:
+                logging.error("[CLIENTE_COMPRAS] ERROR: La compra no tiene un ID válido")
+                raise BaseException("La compra no tiene un id válido")
+        
             logging.info(f"Compra realizada id: {self.compra.id}")
         else:
-            logging.error(f"Error en el microservicio compras")
+            logging.error("[CLIENTE_COMPRAS] ERROR en el microservicio compras")
             raise BaseException("Error en el microservicio compras")
-
+        
     def cancelar_compra(self) -> None:
         
         if not self.compra.id:

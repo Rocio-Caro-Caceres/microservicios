@@ -18,24 +18,28 @@ class ClienteInventarioService:
         self.stock.entrada_salida = 2
         stock_schema = StockSchema()
         r = requests.post(f'{self.URL}inventarios/retirar', json=stock_schema.dump(self.stock))
-
+        logging.info(f"Respuesta de inventario: status={r.status_code}, body={r.text}")
+        
         if r.status_code == 200:
             logging.info(f"Stock <- {r.json()}")
-           
             self.stock = stock_schema.load( r.json() )
             logging.info(f"Stock registrado id: {self.stock.id}")
+            
+        elif r.status_code == 400:  # Código para stock insuficiente
+            logging.error(f"Error de stock: {r.text}")
+            raise ValueError(r.json().get('error', 'Stock insuficiente'))
         else:
-            logging.error(f"Error en el microservicio Stock")
+            logging.error(f"Error en el microservicio Stock: {r.text}")
             raise BaseException("Error en el microservicio Stock")
 
     def ingresar_producto(self) -> None:
-        
+                
         if not self.stock.id:
             logging.error("No se puede ingresar Stock sin id")
             raise BaseException("No se puede ingresar Stock sin id")
         
         self.stock.entrada_salida = 1
-        r = requests.delete(f'{self.URL}inventarios/ingresar{self.stock.id}')
+        r = requests.delete(f'{self.URL}inventarios/ingresar/{self.stock.id}')
         if r.status_code == 200:
             logging.warning(f"Stock registrado id: {self.stock.id}")
         else:
