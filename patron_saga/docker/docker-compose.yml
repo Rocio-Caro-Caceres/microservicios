@@ -6,6 +6,8 @@ services:
             - 5000:5000
         networks:
             - mired
+        volumes:
+            - ../../app-comerce:/app
         environment:
             - FLASK_CONTEXT=${FLASK_CONTEXT}
             # el valor de REDIS_HOST = al container_name que tiene en su propio docker-compose.yml
@@ -29,6 +31,8 @@ services:
             - 5001:5000
         networks:
             - mired
+        volumes:
+            - ../../ms-catalogo:/app
         environment:
             - FLASK_CONTEXT=${FLASK_CONTEXT}
             - REDIS_HOST=${REDIS_HOST}
@@ -48,6 +52,8 @@ services:
             - 5002:5000
         networks:
             - mired
+        volumes:
+            - ../../ms-pagos:/app
         environment:
             - FLASK_CONTEXT=${FLASK_CONTEXT}
             - REDIS_HOST=${REDIS_HOST}
@@ -66,6 +72,8 @@ services:
             - 5003:5000
         networks:
             - mired
+        volumes:
+            - ../../ms-compras:/app
         environment:
             - FLASK_CONTEXT=${FLASK_CONTEXT}
             - REDIS_HOST=${REDIS_HOST}
@@ -84,6 +92,8 @@ services:
             - 5004:5000
         networks:
             - mired
+        volumes:
+            - ../../ms-inventario:/app
         environment:
             - FLASK_CONTEXT=${FLASK_CONTEXT}
             - REDIS_HOST=${REDIS_HOST}
