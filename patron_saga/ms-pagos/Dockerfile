@@ -18,6 +18,7 @@ RUN mkdir app
 
 COPY ./app ./app
 COPY ./app.py .
+COPY ./uwsgi.ini . 
 
 ADD requirements.txt ./requirements.txt
 
@@ -25,4 +26,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
 
-CMD [ "python", "./app.py" ]
+CMD ["uwsgi", "--wsgi-file","app.py", "uwsgi.ini"]  
